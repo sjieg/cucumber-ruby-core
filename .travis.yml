@@ -9,9 +9,5 @@ rvm:
 branches:
   only:
     - master
+    - parser-benchmark
 
-notifications:
-  email:
-    - cukes-devs@googlegroups.com
-  irc:
-    - "irc.freenode.org#cucumber"

@@ -235,6 +235,235 @@ module Cucumber
             expect { feature.describe_to(double.as_null_object) }.to raise_error(ParseError)
           end
         end
+
+        context "time to parse feature files" do
+          def parse_feature
+            result = nil
+            allow( receiver ).to receive(:feature) { |feature| result = feature }
+            start_time = Time.now
+            parse
+            Kernel.puts Time.now - start_time
+          end
+          context "a large feature file" do
+            source do
+              comment 'wow'
+              feature 'Fully featured', language: 'en', tags: '@always', description: "One line,\nand two.." do
+                comment 'wow'
+                background 'Name of the background', description: "One line,\nand two.." do
+                  step 'first background step' do
+                    doc_string <<-END
+                  I wish I was a little bit taller.
+                  I wish I was a baller.
+                  END
+                  end
+                  step 'second background step', keyword: 'And' do
+                    table do
+                      row 'name',   'age', 'location'
+                      row 'Janine', '43',  'Antarctica'
+                    end
+                  end
+                  step 'third background step', keyword: 'And' 
+                  step 'fourth background step', keyword: 'And' 
+                end
+                (0..100).map { |n| comment 'wow'
+                  scenario "name of scenario #{n}", tags: "@tag#{n}", description: "One line,\nand two.." do
+                    step "first step in scenario #{n}" do
+                      doc_string <<-END
+                    I wish I was a little bit taller.
+                    I wish I was a baller.
+                    END
+                    end
+                    step "second step in scenario #{n}", keyword: 'And' do
+                      doc_string <<-END
+                    I wish I was a little bit taller.
+                    I wish I was a baller.
+                    END
+                    end
+                    step "third step in scenario #{n}", keyword: 'When' do
+                      table do
+                        row 'name',   'age', 'location'
+                        row 'Janine', '43',  'Antarctica'
+                      end
+                    end
+                    step "fourth step in scenario #{n}", keyword: 'Then' do
+                      table do
+                        row 'name',   'age', 'location'
+                        row 'Janine', '43',  'Antarctica'
+                      end
+                    end
+                  end }
+                (0..100).map { |n| comment 'yay'
+                  scenario_outline "name of scenario outline#{n}", tags: "@tag#{n}", description: "One line,\nand two.."  do
+                    step 'there are <start> cucumbers'
+                    step 'I eat <eat> cucumbers', keyword: 'When'
+                    step 'I should have <left> cucumbers', keyword: 'Then'
+
+                    comment 'hmmm'
+                    examples "name of first examples table in outline#{n}", tags: "@tag#{n}", description: "One line,\nand two.." do
+                      row 'start', 'eat', 'left'
+                      row '12',    '5',   '7'
+                      row '20',    '5',   '15'
+                    end
+                    examples "name of first examples table in outline#{n}", tags: "@tag#{n}", description: "One line,\nand two.." do
+                      row 'start', 'eat', 'left'
+                      row '12',    '5',   '7'
+                      row '20',    '5',   '15'
+                    end
+                  end }
+              end
+            end
+            it "takes some time" do
+              Kernel.puts "size 100"
+              parse_feature
+            end
+          end
+          context "a larger feature file" do
+            source do
+              comment 'wow'
+              feature 'Fully featured', language: 'en', tags: '@always', description: "One line,\nand two.." do
+                comment 'wow'
+                background 'Name of the background', description: "One line,\nand two.." do
+                  step 'first background step' do
+                    doc_string <<-END
+                  I wish I was a little bit taller.
+                  I wish I was a baller.
+                  END
+                  end
+                  step 'second background step', keyword: 'And' do
+                    table do
+                      row 'name',   'age', 'location'
+                      row 'Janine', '43',  'Antarctica'
+                    end
+                  end
+                  step 'third background step', keyword: 'And' 
+                  step 'fourth background step', keyword: 'And' 
+                end
+                (0..200).map { |n| comment 'wow'
+                  scenario "name of scenario #{n}", tags: "@tag#{n}", description: "One line,\nand two.." do
+                    step "first step in scenario #{n}" do
+                      doc_string <<-END
+                    I wish I was a little bit taller.
+                    I wish I was a baller.
+                    END
+                    end
+                    step "second step in scenario #{n}", keyword: 'And' do
+                      doc_string <<-END
+                    I wish I was a little bit taller.
+                    I wish I was a baller.
+                    END
+                    end
+                    step "third step in scenario #{n}", keyword: 'When' do
+                      table do
+                        row 'name',   'age', 'location'
+                        row 'Janine', '43',  'Antarctica'
+                      end
+                    end
+                    step "fourth step in scenario #{n}", keyword: 'Then' do
+                      table do
+                        row 'name',   'age', 'location'
+                        row 'Janine', '43',  'Antarctica'
+                      end
+                    end
+                  end }
+                (0..200).map { |n| comment 'yay'
+                  scenario_outline "name of scenario outline#{n}", tags: "@tag#{n}", description: "One line,\nand two.."  do
+                    step 'there are <start> cucumbers'
+                    step 'I eat <eat> cucumbers', keyword: 'When'
+                    step 'I should have <left> cucumbers', keyword: 'Then'
+
+                    comment 'hmmm'
+                    examples "name of first examples table in outline#{n}", tags: "@tag#{n}", description: "One line,\nand two.." do
+                      row 'start', 'eat', 'left'
+                      row '12',    '5',   '7'
+                      row '20',    '5',   '15'
+                    end
+                    examples "name of first examples table in outline#{n}", tags: "@tag#{n}", description: "One line,\nand two.." do
+                      row 'start', 'eat', 'left'
+                      row '12',    '5',   '7'
+                      row '20',    '5',   '15'
+                    end
+                  end }
+              end
+            end
+            it "takes some time" do
+              Kernel.puts "size 200"
+              parse_feature
+            end
+          end
+          context "a even larger feature file" do
+            source do
+              comment 'wow'
+              feature 'Fully featured', language: 'en', tags: '@always', description: "One line,\nand two.." do
+                comment 'wow'
+                background 'Name of the background', description: "One line,\nand two.." do
+                  step 'first background step' do
+                    doc_string <<-END
+                  I wish I was a little bit taller.
+                  I wish I was a baller.
+                  END
+                  end
+                  step 'second background step', keyword: 'And' do
+                    table do
+                      row 'name',   'age', 'location'
+                      row 'Janine', '43',  'Antarctica'
+                    end
+                  end
+                  step 'third background step', keyword: 'And' 
+                  step 'fourth background step', keyword: 'And' 
+                end
+                (0..400).map { |n| comment 'wow'
+                  scenario "name of scenario #{n}", tags: "@tag#{n}", description: "One line,\nand two.." do
+                    step "first step in scenario #{n}" do
+                      doc_string <<-END
+                    I wish I was a little bit taller.
+                    I wish I was a baller.
+                    END
+                    end
+                    step "second step in scenario #{n}", keyword: 'And' do
+                      doc_string <<-END
+                    I wish I was a little bit taller.
+                    I wish I was a baller.
+                    END
+                    end
+                    step "third step in scenario #{n}", keyword: 'When' do
+                      table do
+                        row 'name',   'age', 'location'
+                        row 'Janine', '43',  'Antarctica'
+                      end
+                    end
+                    step "fourth step in scenario #{n}", keyword: 'Then' do
+                      table do
+                        row 'name',   'age', 'location'
+                        row 'Janine', '43',  'Antarctica'
+                      end
+                    end
+                  end }
+                (0..400).map { |n| comment 'yay'
+                  scenario_outline "name of scenario outline#{n}", tags: "@tag#{n}", description: "One line,\nand two.."  do
+                    step 'there are <start> cucumbers'
+                    step 'I eat <eat> cucumbers', keyword: 'When'
+                    step 'I should have <left> cucumbers', keyword: 'Then'
+
+                    comment 'hmmm'
+                    examples "name of first examples table in outline#{n}", tags: "@tag#{n}", description: "One line,\nand two.." do
+                      row 'start', 'eat', 'left'
+                      row '12',    '5',   '7'
+                      row '20',    '5',   '15'
+                    end
+                    examples "name of first examples table in outline#{n}", tags: "@tag#{n}", description: "One line,\nand two.." do
+                      row 'start', 'eat', 'left'
+                      row '12',    '5',   '7'
+                      row '20',    '5',   '15'
+                    end
+                  end }
+              end
+            end
+            it "takes some time" do
+              Kernel.puts "size 400"
+              parse_feature
+            end
+          end
+        end
       end
     end
   end
