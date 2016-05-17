@@ -8,9 +8,7 @@ module Gherkin
     def initialize(tag_expressions)
       @ands = []
       @limits = {}
-      tag_expressions.each do |expr|
-        add(expr.strip.split(/\s*,\s*/))
-      end
+      tag_expressions.each {|expr| add(expr.strip.split(/\s*,\s*/)) }
     end
 
     def empty?
@@ -36,15 +34,28 @@ module Gherkin
       tags_with_negation_and_limits.each do |tag_with_negation_and_limit|
         tag_with_negation, limit = tag_with_negation_and_limit.split(':')
         tags_with_negation << tag_with_negation
-        if limit
-          tag_without_negation = negated ? tag_with_negation[1..-1] : tag_with_negation
-          if @limits[tag_without_negation] && @limits[tag_without_negation] != limit.to_i
-            raise "Inconsistent tag limits for #{tag_without_negation}: #{@limits[tag_without_negation]} and #{limit.to_i}"
-          end
-          @limits[tag_without_negation] = limit.to_i
-        end
+
+        next unless limit
+
+        tag_without_negation = without_negation(tag_with_negation, negated)
+
+        raise inconsistent_tag_limits_error_message unless limit_reached?(@limits[tag_without_negation], limit.to_i)
+
+        @limits[tag_without_negation] = limit.to_i
       end
       tags_with_negation
+    end
+
+    def inconsistent_tag_limits_error_message
+      "Inconsistent tag limits for #{tag_without_negation}: #{@limits[tag_without_negation]} and #{limit.to_i}"
+    end
+
+    def limit_reached?(value, limit)
+      !value || value == limit
+    end
+
+    def without_negation(tag, negated=nil)
+      negated ? tag[1..-1] : tag
     end
 
     def ruby_expression
