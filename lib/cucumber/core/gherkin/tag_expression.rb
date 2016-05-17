@@ -50,11 +50,7 @@ module Gherkin
     def ruby_expression
       "(" + @ands.map do |ors|
         ors.map do |tag|
-          if tag =~ /^~(.*)/
-            "!vars['#{$1}']"
-          else
-            "vars['#{tag}']"
-          end
+          tag =~ /^~(.*)/ ? "!vars['#{$1}']" : "vars['#{tag}']"
         end.join("||")
       end.join(")&&(") + ")"
     end
