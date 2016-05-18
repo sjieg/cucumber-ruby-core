@@ -39,15 +39,15 @@ module Gherkin
 
         tag_without_negation = without_negation(tag_with_negation, negated)
 
-        raise inconsistent_tag_limits_error_message unless limit_reached?(@limits[tag_without_negation], limit.to_i)
+        raise inconsistent_tag_limits_error_message(tag_without_negation, @limits[tag_without_negation], limit) unless limit_reached?(@limits[tag_without_negation], limit.to_i)
 
         @limits[tag_without_negation] = limit.to_i
       end
       tags_with_negation
     end
 
-    def inconsistent_tag_limits_error_message
-      "Inconsistent tag limits for #{tag_without_negation}: #{@limits[tag_without_negation]} and #{limit.to_i}"
+    def inconsistent_tag_limits_error_message(tag, existing_limit, given_limit)
+      "Inconsistent tag limits for #{tag}: #{@limits[tag_without_negation]} and #{limit.to_i}"
     end
 
     def limit_reached?(value, limit)
