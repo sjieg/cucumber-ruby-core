@@ -4,6 +4,8 @@
 
 ### Bugfixes
 
+* Handle incomplete examples to scenario outlines. ([109](https://github.com/cucumber/cucumber-ruby-core/pull/109) @brasmusson)
+
 ## [v1.5.0](https://github.com/cucumber/cucumber-ruby-core/compare/v1.4.0...v1.5.0)
 
 ### New Features
